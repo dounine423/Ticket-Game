@@ -22,8 +22,8 @@
         <TextBlock Text="RAFFLE" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 20" FontSize="30" />
         <GroupBox Header="Input" FontSize="14" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="10 70 10 10">
             <WrapPanel>
-                <ui:Button Appearance="Primary" VerticalAlignment="Top" FontSize="14" Margin="10 20 0 0" Width="100" Name="btnNew" Click="btnNew_Click">
-                    <ui:Anchor Content="Anchor" VerticalAlignment="Top"/>
+                <ui:Button Appearance="Primary" VerticalAlignment="Top" FontSize="14" Margin="10 20 0 0" Width="100" Name="btnNew" Click="btnNew_Click" Height="32">
+                    <Label Content="New&#xD;&#xA;"/>
                 </ui:Button>
                 <ui:Button Appearance="Info" Content="Start" VerticalAlignment="Top" FontSize="14" Margin="30 20 0 0" Width="100" Name="btnStart" Click="btnStart_Click"/>
                 <ui:Button Appearance="Caution" Content="History" VerticalAlignment="Top" FontSize="14" Margin="10 20 0 0" Width="100" Name="btnHistory" Click="btnHistory_Click"/>

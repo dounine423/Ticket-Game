@@ -1,33 +1,10 @@
 ﻿using RAFFLE.Schema;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using Wpf.Ui.Controls;
 using System.Printing;
 using RAFFLE.Utils;
-using System.Drawing.Printing;
-using System.Drawing;
 using System.Globalization;
-using Wpf.Ui.Extensions;
-using Image = System.Drawing.Image;
-using System.Windows.Media.Media3D;
-using System.Windows.Interop;
-using System.IO;
-using RAFFLE.Manager;
 
 namespace RAFFLE.UI
 {
@@ -147,11 +124,5 @@ namespace RAFFLE.UI
             Builder.RaiseEvent(EventRaiseType.History);
         }
 
-        //private void txtImpluse_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    e.Handled = true;
-        //    txtImpluse.Text += "+";
-        //    sImpluse = txtImpluse.Text;
-        //}
     }
 }

@@ -1,29 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Wpf.Ui.Controls;
 using RAFFLE.Schema;
-using Microsoft.Win32;
-using RAFFLE.Utils;
 using RAFFLE.Manager;
 using System.Globalization;
 using System.Windows.Threading;
-using MessageBox = System.Windows.MessageBox;
-using System.Security.Cryptography.Xml;
-using Microsoft.VisualBasic;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using System.Windows.Markup.Localizer;
 
 namespace RAFFLE.UI
 {
