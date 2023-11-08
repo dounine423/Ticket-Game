@@ -12,5 +12,6 @@ namespace RAFFLE.Utils
         Other = 0x0002,
         DocSelRemove = 0x1001,
         PhotoRemove = 0x1002,
+        FileCheck= 0x1003,
     }
 }

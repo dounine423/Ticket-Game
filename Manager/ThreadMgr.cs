@@ -6,7 +6,6 @@ namespace RAFFLE.Manager
 {
     public static class ThreadMgr
     {
-        public static int curProgress = 1;
         public static int timerSpc = 4;
         public static void PrintText(string text, int fontsize)
         {

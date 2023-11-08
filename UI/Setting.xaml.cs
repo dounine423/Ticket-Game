@@ -12,9 +12,6 @@ using System.Globalization;
 
 namespace RAFFLE.UI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class Setting : UiWindow
     {
         private BitmapImage img = null;
@@ -31,10 +28,8 @@ namespace RAFFLE.UI
             txtTimePicker.Text = DateTime.Now.Hour + ":" + DateTime.Now.Minute;
             txtPrice.Text = "1";
             txtRate.Text = "25";
-
             string executablePath = Assembly.GetExecutingAssembly().Location;
-            string curDir = System.IO.Path.GetDirectoryName(executablePath);
-
+            string curDir = Path.GetDirectoryName(executablePath);
             var uri = new Uri(curDir + "\\Invalid.png");
             img = new BitmapImage(uri);
             SetImg.Source = img;
@@ -61,12 +56,13 @@ namespace RAFFLE.UI
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+           
             SettingSchema.Time = txtTime.SelectedDate.Value.Date.ToShortDateString() + txtTimePicker.Text+ ":00";
             SettingSchema.Rate = Convert.ToDouble(txtRate.Text);
             SettingSchema.Price = Convert.ToInt16(txtPrice.Text);
             SettingSchema.Location = txtLocation.Text;
             SettingSchema.Description = txtDescription.Text;
-
+            SettingSchema.CurProgress = 0;
             if (getDateTimeFromString(SettingSchema.Time) <= DateTime.Now)
             {
                 MsgHelper.ShowMessage(MsgType.Other, "Invalid time");
@@ -97,14 +93,11 @@ namespace RAFFLE.UI
                 MsgHelper.ShowMessage(MsgType.Other, "Invalid description");
                 return;
             }
-
             SettingSchema.Img = img;
             SettingSchema.ImgPath = imgPath;
-            // close setting dialog
             Builder.RaiseEvent(EventRaiseType.MainWindow);
             Builder.uiMainWindow.UpdateState();
             Builder.uiMainWindow.Focus();
-
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

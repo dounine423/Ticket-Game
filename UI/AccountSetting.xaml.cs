@@ -48,7 +48,6 @@ namespace RAFFLE.UI
                 MsgHelper.ShowMessage(MsgType.Other, "Password don't match");
                 return;
             }
-
             string new_username = txtNewUsername.Text == "" ? username : txtNewUsername.Text;
             string new_pin = txtNewPIN.Password;
 

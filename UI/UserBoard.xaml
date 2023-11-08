@@ -8,20 +8,21 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         WindowStartupLocation="CenterScreen"
         Title="UserBoard" Height="600" Width="1200"
-        WindowState="Normal"
+        WindowState="Normal" Closing="UiWindow_Closing"
 		>
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.8*" />
+            <ColumnDefinition Width="667*" />
+            <ColumnDefinition Width="28*" />
+            <ColumnDefinition Width="506*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="" Name="lblTitle" FontSize="50" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="600 0 0 0"/>
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="50">
+        <TextBlock Text="" Name="lblTitle" FontSize="50" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Margin="600,0,0,278" Grid.RowSpan="2"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="50,50,50,50">
             <TextBlock Text="Current Time: " Name="lblCurTime" FontSize="36" Margin="0 30 0 0">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0" Color="Red" Opacity="1" BlurRadius="5" />
@@ -56,7 +57,7 @@
                 <ui:ProgressRing IsIndeterminate="False" Progress="0" Name="prgThread" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="250" Height="250"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="50">
+        <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="23,50,50,50">
             <Image Name="Img" Stretch="Fill" Height="650" Width="600"/>
             <!--<DockPanel Width="600">
                 <TextBlock Text="Winner: " Name="lblWinner" FontSize="40" Margin="0 30 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -66,7 +67,7 @@
                 </TextBlock>
             </DockPanel>-->
         </StackPanel>
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <DockPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="23,236,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
             <!--KeyDown="txtImpluse_KeyDown"-->
             <ui:TextBox PlaceholderText="" Name="txtImpluse" FontSize="36" Width="500" Margin="10" PreviewTextInput="txtImpluse_PreviewTextInput"/>
         </DockPanel>

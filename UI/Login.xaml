@@ -10,27 +10,33 @@
         Title="Login" Height="300" Width="600"
 		MaxHeight="300" MaxWidth="600"
 		MinHeight="300" MinWidth="600"
-		Closing="UiWindow_Closing"
+		Closing="UiWindow_Closing" ResizeMode="CanMinimize"
 		>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition Width="86*"/>
+            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="226*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="81*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="ENTER PIN..." Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
-        <StackPanel Grid.Row="1">
+        <TextBlock Text="ENTER PIN..." Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="44,0,0,0"/>
+        <StackPanel Grid.ColumnSpan="7" Margin="0,81,0,81" Grid.RowSpan="3">
             <ui:TextBox Width="200" PlaceholderText="User Name" Name="txtUsername" Margin="5"/>
             <ui:PasswordBox Width="200" PlaceholderText="PIN" Name="txtPassword" KeyUp="txtPassword_KeyUp" Margin="5"/>
         </StackPanel>
-        <WrapPanel Grid.Column="1" Grid.Row="2" Margin="200 25 100 10">
+        <WrapPanel Grid.Column="3" Grid.Row="2" Margin="78,25,19,10" Grid.ColumnSpan="3">
             <ui:Button Appearance="Success" Name="btnLogin" Content="ACCESS" Click="btnLogin_Click"/>
             <ui:Button Appearance="Caution" Name="btnSetting" Content="Setting" Margin="50 0 0 0" Click="btnSetting_Click"/>
         </WrapPanel>
-        
-        <ui:Snackbar Title="Error" Grid.Row="2" MaxWidth="200" Appearance="Secondary" Icon="PuzzleCube24" Visibility="Visible" Message="Invalid PIN" Timeout="5000" x:Name="RootSnackBar" Margin="30 50 30 20"/>
+
+        <ui:Snackbar Title="Error" Grid.Row="1" MaxWidth="200" Appearance="Secondary" Icon="PuzzleCube24" Visibility="Visible" Message="Invalid PIN" Timeout="5000" x:Name="RootSnackBar" Margin="18,0,30,20" Grid.ColumnSpan="6" Grid.RowSpan="2" Grid.Column="1"/>
     </Grid>
 </ui:UiWindow>

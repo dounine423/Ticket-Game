@@ -1,5 +1,6 @@
 ﻿using RAFFLE.Schema;
 using System;
+using System.IO;
 using System.Windows;
 using Wpf.Ui.Controls;
 using System.Printing;
@@ -8,9 +9,7 @@ using System.Globalization;
 
 namespace RAFFLE.UI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>  
+
     public partial class MainWindow : UiWindow
     {
         private bool bThreadStatus = false;
@@ -53,7 +52,15 @@ namespace RAFFLE.UI
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
-            Builder.RaiseEvent(EventRaiseType.Setting);
+            if (File.Exists("./log.txt"))
+            {
+                MsgHelper.ShowMessage(MsgType.FileCheck, "exites");
+                return;
+            }
+            else
+            {
+                Builder.RaiseEvent(EventRaiseType.Setting);
+            }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -92,11 +99,6 @@ namespace RAFFLE.UI
             if (DateTime.TryParseExact(dateString, inputFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
             {
                 formattedDateTime = dateTime.ToString(outputFormat);
-                //Console.WriteLine(formattedDateTime);
-            }
-            else
-            {
-                //Console.WriteLine("Invalid date format");
             }
             return Convert.ToDateTime(formattedDateTime);
         }
@@ -104,6 +106,12 @@ namespace RAFFLE.UI
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            if (SettingSchema.Location == null)
+            {
+                MsgHelper.ShowMessage(MsgType.Other,"Invalid Setting");
+                return;
+            }
+           
             if (!bThreadStatus)
             {
                 Builder.RaiseEvent(EventRaiseType.UserBoard);

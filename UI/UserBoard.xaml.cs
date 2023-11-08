@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using System.IO;
 using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 using RAFFLE.Schema;
@@ -75,7 +76,8 @@ namespace RAFFLE.UI
             lblPrice.Text = "Price: " + SettingSchema.Price;
             lblLocation.Text = "Location: " + SettingSchema.Location;
             lblDescription.Text = "Description: " + SettingSchema.Description;
-            lblWinnerPrice.Text = "Winner Prize: 0";
+            ResultSchema.WinnerPrice = SettingSchema.CurProgress * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
+            lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
             Img.Source = SettingSchema.Img;
             timer_raffle.Interval = TimeSpan.FromSeconds(ThreadMgr.timerSpc); // Set the interval to 1 second
             timer_raffle.Tick += Timer_Tick; // Set the event handler
@@ -118,15 +120,15 @@ namespace RAFFLE.UI
             DateTime endTime = getDateTimeFromString(SettingSchema.Time);
             if (sImpluse != "" && sImpluse != null && sImpluse.Length > 0)
             {
-                ResultSchema.WinnerPrice = ThreadMgr.curProgress * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
-                ThreadMgr.PrintText("Ticket " + ThreadMgr.curProgress + "\n" + endTime.ToShortDateString()+" "+endTime.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
+                ResultSchema.WinnerPrice =SettingSchema.CurProgress * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
+               // ThreadMgr.PrintText("Ticket " +SettingSchema.CurProgress  + "\n" + endTime.ToShortDateString()+" "+endTime.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
                 txtImpluse.Text = sImpluse;
                 int cnt = (int)SettingSchema.Price;
                 if (sImpluse.Length < cnt)
                     cnt = sImpluse.Length;
                 sImpluse = sImpluse.Substring(cnt);
                 txtImpluse.Text = sImpluse; 
-                ThreadMgr.curProgress++;
+                SettingSchema.CurProgress++;
                 lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
             }
             if(curTime > endTime)
@@ -139,30 +141,31 @@ namespace RAFFLE.UI
                 SettingSchema.Time = formattedDateTime;
                 lblEndTime.Text = "End Time: " + nextEndTime.ToShortDateString()+" "+ nextEndTime.ToLongTimeString();
                 Random random = new Random();
-                if (ThreadMgr.curProgress == 1)
+                if (SettingSchema.CurProgress == 1)
                 {
                     ResultSchema.WinnerNumber = 0;
                 }
                 else
                 {
-                    ResultSchema.WinnerNumber = random.Next(1, ThreadMgr.curProgress);
+                    ResultSchema.WinnerNumber = random.Next(1, SettingSchema.CurProgress);
                 }
-                ResultSchema.AdminPrice =(ThreadMgr.curProgress-1)  * SettingSchema.Price * (SettingSchema.Rate / 100);
+                ResultSchema.AdminPrice =(SettingSchema.CurProgress-1)  * SettingSchema.Price * (SettingSchema.Rate / 100);
                 ResultSchema.Img = SettingSchema.Img;
-                if (ThreadMgr.curProgress == 0)
+                if (SettingSchema.CurProgress == 0)
                 {
                     Builder.RaiseEvent(EventRaiseType.Result);
                     //EndState();
                 }
                 Builder.RaiseEvent(EventRaiseType.Result);
                 //EndState();
-                ThreadMgr.PrintText("Winner\n" + ResultSchema.WinnerNumber+" / "+ ResultSchema.WinnerPrice +" $ " + "\n" + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
+               // ThreadMgr.PrintText("Winner\n" + ResultSchema.WinnerNumber+" / "+ ResultSchema.WinnerPrice +" $ " + "\n" + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
                 DBMgr.InsertHistory();
                 ResultSchema.WinnerPrice = 0;
-                ThreadMgr.curProgress = 1;
+                SettingSchema.CurProgress = 1;
                 lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
                 
             }
+            save_setting();
  
         }
 
@@ -177,5 +180,29 @@ namespace RAFFLE.UI
             }
         }
 
+        private void save_setting()
+        {
+            FileStream fs = new FileStream("./log.txt", FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(SettingSchema.ImgPath);
+            sw.WriteLine(SettingSchema.Time);
+            sw.WriteLine(SettingSchema.Rate);
+            sw.WriteLine(SettingSchema.Price);
+            sw.WriteLine(SettingSchema.Location);
+            sw.WriteLine(SettingSchema.Description);
+            sw.WriteLine(SettingSchema.CurProgress);
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+        }
+
+
+        // private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        // {
+        // timer_raffle.Stop();
+        // timer_clock.Stop();
+        // File.Delete("./log.txt");
+        //   this.Close();
+        // }
     }
 }
