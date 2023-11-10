@@ -12,7 +12,6 @@ namespace RAFFLE.UI
 {
     public partial class UserBoard : UiWindow
     {
-        private BitmapImage img = null;
         private string sImpluse;
         private int clockInterval;
         private bool raffleFlag;
@@ -151,11 +150,6 @@ namespace RAFFLE.UI
                 }
                 ResultSchema.AdminPrice =(SettingSchema.CurProgress-1)  * SettingSchema.Price * (SettingSchema.Rate / 100);
                 ResultSchema.Img = SettingSchema.Img;
-                if (SettingSchema.CurProgress == 0)
-                {
-                    Builder.RaiseEvent(EventRaiseType.Result);
-                    //EndState();
-                }
                 Builder.RaiseEvent(EventRaiseType.Result);
                 //EndState();
                // ThreadMgr.PrintText("Winner\n" + ResultSchema.WinnerNumber+" / "+ ResultSchema.WinnerPrice +" $ " + "\n" + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
@@ -166,6 +160,7 @@ namespace RAFFLE.UI
                 
             }
             save_setting();
+            Update();
  
         }
 
@@ -196,13 +191,11 @@ namespace RAFFLE.UI
             fs.Close();
         }
 
+        private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            timer_raffle.Stop();
+            timer_clock.Stop();
+        }
 
-        // private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        // {
-        // timer_raffle.Stop();
-        // timer_clock.Stop();
-        // File.Delete("./log.txt");
-        //   this.Close();
-        // }
     }
 }

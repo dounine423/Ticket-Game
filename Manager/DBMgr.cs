@@ -75,7 +75,6 @@ namespace RAFFLE.Manager
             try
             {
                 SQLiteCommand sqlite_cmd;
-                SQLiteDataReader sqlite_reader;
                 sqlite_cmd = sqliteConn.CreateCommand();
                 sqlite_cmd.CommandText = String.Format("update tbl_user set password = '{0}', username = '{1}' where username = '{2}'", new_pin, new_username, username);
                 sqlite_cmd.ExecuteNonQuery();

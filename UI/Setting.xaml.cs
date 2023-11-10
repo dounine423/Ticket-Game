@@ -14,26 +14,30 @@ namespace RAFFLE.UI
 {
     public partial class Setting : UiWindow
     {
-        private BitmapImage img = null;
-        private string imgPath = null;
+        private BitmapImage img;
+        private string imgPath;
+        private DateTime selectedDate;
+        private int selectedHour;
+        private int selectedMin;
         public Setting()
         {
             InitializeComponent();
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            txtTime.SelectedDate = DateTime.Now;
-            txtTimePicker.Text = DateTime.Now.Hour + ":" + DateTime.Now.Minute;
+            selectedDate = DateTime.Now;
+            selectedHour = DateTime.Now.Hour;
+            selectedMin = DateTime.Now.Minute;
+            txtTime.SelectedDate = selectedDate;
+            txtTimePicker.Text = selectedHour + ":"+ selectedMin;
             txtPrice.Text = "1";
             txtRate.Text = "25";
+            imgPath = "";
             string executablePath = Assembly.GetExecutingAssembly().Location;
             string curDir = Path.GetDirectoryName(executablePath);
             var uri = new Uri(curDir + "\\Invalid.png");
             img = new BitmapImage(uri);
             SetImg.Source = img;
         }
+
+     
 
         private DateTime getDateTimeFromString(string dateString)
         {
@@ -56,10 +60,19 @@ namespace RAFFLE.UI
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-           
-            SettingSchema.Time = txtTime.SelectedDate.Value.Date.ToShortDateString() + txtTimePicker.Text+ ":00";
+            string selectedTime = "";
+            if (selectedHour < 10)
+                selectedTime += "0" + selectedHour + ":";
+            else
+                selectedTime += selectedHour + ":";
+            if (selectedMin < 10)
+                selectedTime += "0" + selectedMin;
+            else
+                selectedTime += selectedMin;
+            selectedTime += ":00";
+            SettingSchema.Time = selectedDate.ToShortDateString() + selectedTime;
             SettingSchema.Rate = Convert.ToDouble(txtRate.Text);
-            SettingSchema.Price = Convert.ToInt16(txtPrice.Text);
+            SettingSchema.Price = Convert.ToInt32(txtPrice.Text);
             SettingSchema.Location = txtLocation.Text;
             SettingSchema.Description = txtDescription.Text;
             SettingSchema.CurProgress = 0;
@@ -68,7 +81,7 @@ namespace RAFFLE.UI
                 MsgHelper.ShowMessage(MsgType.Other, "Invalid time");
                 return;
             }
-            if (imgPath == null)
+            if (imgPath=="")
             {
                 MsgHelper.ShowMessage(MsgType.Other, "Invalid image");
                 return;
@@ -141,12 +154,15 @@ namespace RAFFLE.UI
 
         private void hourSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lblHour.Text = Convert.ToInt16(hourSlider.Value) + "H:";
+            selectedHour = Convert.ToInt16(hourSlider.Value);
+            lblHour.Text = selectedHour + "H:";
+           
         }
 
         private void minuteSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lblMinute.Text = Convert.ToInt16(minuteSlider.Value) + "M:";
+            selectedMin = Convert.ToInt16(minuteSlider.Value);
+            lblMinute.Text =selectedMin + "M:";
         }
 
         private void txtTimePicker_MouseEnter(object sender, MouseEventArgs e)

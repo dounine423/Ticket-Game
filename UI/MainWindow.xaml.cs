@@ -111,7 +111,6 @@ namespace RAFFLE.UI
                 MsgHelper.ShowMessage(MsgType.Other,"Invalid Setting");
                 return;
             }
-           
             if (!bThreadStatus)
             {
                 Builder.RaiseEvent(EventRaiseType.UserBoard);

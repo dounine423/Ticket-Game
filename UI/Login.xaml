@@ -9,8 +9,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Login" Height="300" Width="600"
 		MaxHeight="300" MaxWidth="600"
-		MinHeight="300" MinWidth="600"
-		Closing="UiWindow_Closing" ResizeMode="CanMinimize"
+		MinHeight="300" MinWidth="600" ResizeMode="CanMinimize"
 		>
     <Grid>
         <Grid.ColumnDefinitions>

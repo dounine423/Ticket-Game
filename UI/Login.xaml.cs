@@ -14,7 +14,6 @@ namespace RAFFLE.UI
     /// </summary>
     public partial class Login : UiWindow
     {
-        private BitmapImage img = null;
         public Login()
         {
             InitializeComponent();

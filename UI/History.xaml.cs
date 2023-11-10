@@ -13,7 +13,6 @@ namespace RAFFLE.UI
     /// </summary>
     public partial class History : UiWindow
     {
-        private BitmapImage img = null;
         List<HistoryEntity> lstHistory = new List<HistoryEntity>();
 
         public History()

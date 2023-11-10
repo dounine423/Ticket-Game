@@ -11,7 +11,6 @@ namespace RAFFLE.UI
     /// </summary>
     public partial class AccountSetting : UiWindow
     {
-        private BitmapImage img = null;
         public AccountSetting()
         {
             InitializeComponent();

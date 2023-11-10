@@ -49,7 +49,7 @@ namespace RAFFLE.Utils
                     messageBox.ButtonLeftClick += (_, _) => { messageBox.Hide(); bRes = true; };
                     messageBox.ButtonRightClick += (_, _) =>
                     {
-                        File.Delete("./log.txt");
+                   
                         Builder.RaiseEvent(EventRaiseType.AppExit);
                     }; 
                     break;
@@ -127,7 +127,12 @@ namespace RAFFLE.Utils
                     messageBox.ButtonRightName = "Yes";
                     messageBox.ButtonLeftName = "No";
                     messageBox.ShowTitle = true;
-                    messageBox.ButtonLeftClick += (_, _) => Builder.RaiseEvent(EventRaiseType.Setting);
+                    messageBox.ButtonLeftClick += (_, _) =>
+                    {
+                        messageBox.Hide();
+                        bRes = false;
+                        Builder.RaiseEvent(EventRaiseType.Setting);
+                    };
                     messageBox.ButtonRightClick += (_, _) => {
                         FileStream fs = new FileStream("./log.txt", FileMode.Open, FileAccess.Read);
                         StreamReader sr = new StreamReader(fs);
