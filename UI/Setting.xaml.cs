@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 using RAFFLE.Schema;
+using RAFFLE.Manager;
 using Microsoft.Win32;
 using RAFFLE.Utils;
 using System.Reflection;
@@ -75,7 +76,8 @@ namespace RAFFLE.UI
             SettingSchema.Price = Convert.ToInt32(txtPrice.Text);
             SettingSchema.Location = txtLocation.Text;
             SettingSchema.Description = txtDescription.Text;
-            SettingSchema.CurProgress = 0;
+            SettingSchema.CurProgress = 1;
+            SettingSchema.CurImplse = 0;
             if (getDateTimeFromString(SettingSchema.Time) <= DateTime.Now)
             {
                 MsgHelper.ShowMessage(MsgType.Other, "Invalid time");
@@ -108,6 +110,8 @@ namespace RAFFLE.UI
             }
             SettingSchema.Img = img;
             SettingSchema.ImgPath = imgPath;
+            DBMgr.DeleteTmpCache();
+            DBMgr.InsertTmpCache();
             Builder.RaiseEvent(EventRaiseType.MainWindow);
             Builder.uiMainWindow.UpdateState();
             Builder.uiMainWindow.Focus();

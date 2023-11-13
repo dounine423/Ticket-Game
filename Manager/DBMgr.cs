@@ -2,10 +2,12 @@
 using RAFFLE.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace RAFFLE.Manager
 {
@@ -175,5 +177,88 @@ namespace RAFFLE.Manager
             Image image = new Bitmap(ms);
             return image;
         }
+
+        public static void CreateTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = "CREATE TABLE tmp_cache  (\r\n  `username` varchar(255)  Primary key,\r\n  `rate` double,\r\n  `price` double,\r\n `implse` int,\r\n  `process` int,\r\n  `imgpath` varchar(255),\r\n  `endtime` varchar(255) ,\r\n  `location` varchar(255) ,\r\n  `description` varchar(255) \r\n) ";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+
+        public static void DropTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = "DROP TABLE IF EXISTS tmp_cache";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+
+        public static Boolean CheckTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = "Select count(username) from  tmp_cache";
+            cmd.CommandText = query;
+            cmd.CommandType = CommandType.Text;
+            int rowCount = 0;
+            rowCount = Convert.ToInt32(cmd.ExecuteScalar());
+            if (rowCount == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public static void InsertTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = String.Format("Insert into tmp_cache (username, rate, price, implse, process, imgpath , location, description, endtime) values ( 'admin', {0}, {1}, {2}, {3}, '{4}', '{5}', '{6}', '{7}');", SettingSchema.Rate, SettingSchema.Price, SettingSchema.CurImplse, SettingSchema.CurProgress, SettingSchema.ImgPath, SettingSchema.Location, SettingSchema.Description, SettingSchema.Time); ;
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+
+        public static void DeleteTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = "Delete from tmp_cache";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+
+        public static void ReadTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query = "Select username, rate, price, implse, process, imgpath, location, description, endtime from tmp_cache";
+            cmd.CommandText = query;
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while(reader.Read())
+            {
+                SettingSchema.Rate = reader.GetDouble(1);
+                SettingSchema.Price = reader.GetDouble(2);
+                SettingSchema.CurImplse = reader.GetInt32(3);
+                SettingSchema.CurProgress = reader.GetInt32(4);
+                SettingSchema.ImgPath = reader.GetString(5);
+                var url = new Uri(SettingSchema.ImgPath);
+                SettingSchema.Img=new BitmapImage(url);
+                SettingSchema.Location = reader.GetString(6);
+                SettingSchema.Description = reader.GetString(7);
+                SettingSchema.Time = reader.GetString(8);
+            }
+        }
+
+        public static void UpdateTmpCache()
+        {
+            SQLiteCommand cmd = new SQLiteCommand();
+            cmd = sqliteConn.CreateCommand();
+            string query =String.Format("Update tmp_cache Set implse = {0}, process = {1}, endtime = '{2}'  Where username = 'admin'" ,SettingSchema.CurImplse, SettingSchema.CurProgress, SettingSchema.Time);
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+
     }
 }

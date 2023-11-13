@@ -12,6 +12,7 @@ namespace RAFFLE.Schema
         private static string m_Location;
         private static string m_Description;
         private static int m_CurProgress;
+        private static int m_CurImplse;
 
         public static string Time { get => m_Time; set => m_Time = value; }
         public static double Rate { get => m_Rate; set => m_Rate = value; }
@@ -21,5 +22,6 @@ namespace RAFFLE.Schema
         public static string Location { get => m_Location; set => m_Location = value; }
         public static string Description { get => m_Description; set => m_Description = value; }
         public static int CurProgress { get => m_CurProgress; set => m_CurProgress = value; }
+        public static int CurImplse { get => m_CurImplse; set => m_CurImplse = value; }
     }
 }

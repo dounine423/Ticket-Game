@@ -5,25 +5,12 @@ using System.Windows;
 using RAFFLE.Schema;
 using System.Windows.Media.Imaging;
 using System.Globalization;
+using RAFFLE.Manager;
 
 namespace RAFFLE.Utils
 {
     public static class MsgHelper
     {
-        public static DateTime getDateTimeFromString(string dateString)
-        {
-            string inputFormat = "M/d/yyyyHH:mm:ss";
-            string outputFormat = "M/d/yyyy h:mm:ss tt";
-
-            DateTime dateTime;
-            string formattedDateTime = "";
-
-            if (DateTime.TryParseExact(dateString, inputFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
-            {
-                formattedDateTime = dateTime.ToString(outputFormat);
-            }
-            return Convert.ToDateTime(formattedDateTime);
-        }
         public static bool ShowMessage(MsgType msgType, string msgTxt)
         {
             bool bRes = false;
@@ -134,26 +121,8 @@ namespace RAFFLE.Utils
                         Builder.RaiseEvent(EventRaiseType.Setting);
                     };
                     messageBox.ButtonRightClick += (_, _) => {
-                        FileStream fs = new FileStream("./log.txt", FileMode.Open, FileAccess.Read);
-                        StreamReader sr = new StreamReader(fs);
-                        SettingSchema.ImgPath = sr.ReadLine();
-                        var uri = new Uri(SettingSchema.ImgPath);
-                        SettingSchema.Img = new BitmapImage(uri);
-                        SettingSchema.Time = sr.ReadLine();
-                        DateTime curTime = DateTime.Now;
-                        DateTime endTime = getDateTimeFromString(SettingSchema.Time);
-                        if (curTime > endTime)
-                        {
-                            SettingSchema.Time = curTime.AddSeconds(300).ToString("M/d/yyyyHH:mm:ss");
-                        }
-                        SettingSchema.Rate = Convert.ToDouble(sr.ReadLine());
-                        SettingSchema.Price = Convert.ToDouble(sr.ReadLine());
-                        SettingSchema.Location = sr.ReadLine();
-                        SettingSchema.Description = sr.ReadLine();
-                        SettingSchema.CurProgress = Convert.ToInt32(sr.ReadLine());
+                        DBMgr.ReadTmpCache();
                         Builder.uiMainWindow.UpdateState();
-                        sr.Close();
-                        fs.Close();
                         messageBox.Hide(); 
                         bRes = false;
                     };

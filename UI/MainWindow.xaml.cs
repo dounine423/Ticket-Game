@@ -5,6 +5,7 @@ using System.Windows;
 using Wpf.Ui.Controls;
 using System.Printing;
 using RAFFLE.Utils;
+using RAFFLE.Manager;
 using System.Globalization;
 
 namespace RAFFLE.UI
@@ -52,7 +53,7 @@ namespace RAFFLE.UI
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists("./log.txt"))
+            if (DBMgr.CheckTmpCache())
             {
                 MsgHelper.ShowMessage(MsgType.FileCheck, "exites");
                 return;
@@ -113,6 +114,27 @@ namespace RAFFLE.UI
             }
             if (!bThreadStatus)
             {
+                DateTime now = DateTime.Now;
+                if (now > getDateTimeFromString(SettingSchema.Time))
+                {
+                    Random random = new Random();
+                    ResultSchema.WinnerPrice = (SettingSchema.CurProgress - 1) * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
+                    ResultSchema.AdminPrice = (SettingSchema.CurProgress - 1) * SettingSchema.Price * (SettingSchema.Rate / 100);
+                    ResultSchema.Img = SettingSchema.Img;
+                    if (SettingSchema.CurProgress == 1)
+                    {
+                        ResultSchema.WinnerNumber = 0;
+                    }
+                    else
+                    {
+                        ResultSchema.WinnerNumber = random.Next(1, SettingSchema.CurProgress);
+                    }
+                    ThreadMgr.PrintText("Winner\n" + ResultSchema.WinnerNumber + " / " + ResultSchema.WinnerPrice + " $ " + "\n" + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
+                    DBMgr.InsertHistory();
+                    ResultSchema.WinnerPrice = 0;
+                    SettingSchema.CurProgress = 1;
+                    SettingSchema.Time = now.AddSeconds(300).ToString("M/d/yyyyHH:mm:ss");
+                }
                 Builder.RaiseEvent(EventRaiseType.UserBoard);
                 Builder.uiUserBoard.Update();
             }

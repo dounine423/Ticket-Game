@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
-using System.IO;
-using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 using RAFFLE.Schema;
 using RAFFLE.Manager;
 using System.Globalization;
 using System.Windows.Threading;
+using RAFFLE.Utils;
 
 namespace RAFFLE.UI
 {
@@ -75,8 +74,11 @@ namespace RAFFLE.UI
             lblPrice.Text = "Price: " + SettingSchema.Price;
             lblLocation.Text = "Location: " + SettingSchema.Location;
             lblDescription.Text = "Description: " + SettingSchema.Description;
-            ResultSchema.WinnerPrice = SettingSchema.CurProgress * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
+            ResultSchema.WinnerPrice =(SettingSchema.CurProgress-1)  * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
             lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
+            for (int i = 0; i < SettingSchema.CurImplse; i++)
+                sImpluse += "+";
+            txtImpluse.Text = sImpluse;
             Img.Source = SettingSchema.Img;
             timer_raffle.Interval = TimeSpan.FromSeconds(ThreadMgr.timerSpc); // Set the interval to 1 second
             timer_raffle.Tick += Timer_Tick; // Set the event handler
@@ -92,7 +94,7 @@ namespace RAFFLE.UI
         private void TimerClock_Tick(object sender, EventArgs e)
         {
             DateTime curTime = DateTime.Now;
-            if (!raffleFlag &&curTime.Subtract(raffleStopTime).TotalSeconds>=delay)
+            if (!raffleFlag && curTime.Subtract(raffleStopTime).TotalSeconds>=delay)
             {
                 raffleFlag = true;
                 timer_raffle.Start();
@@ -119,15 +121,17 @@ namespace RAFFLE.UI
             DateTime endTime = getDateTimeFromString(SettingSchema.Time);
             if (sImpluse != "" && sImpluse != null && sImpluse.Length > 0)
             {
-                ResultSchema.WinnerPrice =SettingSchema.CurProgress * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
                // ThreadMgr.PrintText("Ticket " +SettingSchema.CurProgress  + "\n" + endTime.ToShortDateString()+" "+endTime.ToShortTimeString() + "\n" + SettingSchema.Location + "\n" + SettingSchema.Description, 14);
+                SettingSchema.CurProgress++;
+                ResultSchema.WinnerPrice =(SettingSchema.CurProgress-1)  * SettingSchema.Price * (1 - SettingSchema.Rate / 100);
+                
                 txtImpluse.Text = sImpluse;
                 int cnt = (int)SettingSchema.Price;
                 if (sImpluse.Length < cnt)
                     cnt = sImpluse.Length;
                 sImpluse = sImpluse.Substring(cnt);
-                txtImpluse.Text = sImpluse; 
-                SettingSchema.CurProgress++;
+                txtImpluse.Text = sImpluse;
+                SettingSchema.CurImplse = sImpluse.Length;
                 lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
             }
             if(curTime > endTime)
@@ -157,10 +161,9 @@ namespace RAFFLE.UI
                 ResultSchema.WinnerPrice = 0;
                 SettingSchema.CurProgress = 1;
                 lblWinnerPrice.Text = "Winner Prize: " + ResultSchema.WinnerPrice;
-                
             }
-            save_setting();
-            Update();
+            DBMgr.UpdateTmpCache();
+            //Update();
  
         }
 
@@ -172,23 +175,9 @@ namespace RAFFLE.UI
             {
                 txtImpluse.Text += "+";
                 sImpluse = txtImpluse.Text;
+                SettingSchema.CurImplse = sImpluse.Length;
+                DBMgr.UpdateTmpCache();
             }
-        }
-
-        private void save_setting()
-        {
-            FileStream fs = new FileStream("./log.txt", FileMode.Create, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(SettingSchema.ImgPath);
-            sw.WriteLine(SettingSchema.Time);
-            sw.WriteLine(SettingSchema.Rate);
-            sw.WriteLine(SettingSchema.Price);
-            sw.WriteLine(SettingSchema.Location);
-            sw.WriteLine(SettingSchema.Description);
-            sw.WriteLine(SettingSchema.CurProgress);
-            sw.Flush();
-            sw.Close();
-            fs.Close();
         }
 
         private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

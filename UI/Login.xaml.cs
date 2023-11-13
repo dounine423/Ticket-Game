@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 using RAFFLE.Utils;
 using RAFFLE.Manager;

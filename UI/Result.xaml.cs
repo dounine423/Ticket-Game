@@ -39,7 +39,7 @@ namespace RAFFLE.UI
 
         private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Builder.RaiseEvent(EventRaiseType.MainWindow);
+          //  Builder.RaiseEvent(EventRaiseType.MainWindow);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
